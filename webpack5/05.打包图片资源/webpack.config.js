@@ -20,7 +20,7 @@ module.exports = {
         // 处理图片资源
         test: /\.(jpg|png|gif)$/,
         // 使用一个 loader
-        // 下载 url-loader file-loader
+        // 下载 url-loader file-loader，url-loader 依赖于 file-loader，所以要下载两个 loader
         // 单个 loader 直接使用 loader
         loader: 'url-loader',
         options: {

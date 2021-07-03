@@ -1,0 +1,17 @@
+#box1 {
+  width: 100px;
+  height: 100px;
+  background-color: pink;
+
+  /* 加入样式测试 postcss 的兼容性问题 */
+  display: -webkit-flex;
+  display: flex;
+  /* 3d 隐藏背面的效果 */
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+#box2 {
+  width: 200px;
+  height: 200px;
+  background-color: deeppink;
+}

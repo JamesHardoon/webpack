@@ -47,7 +47,13 @@ module.exports = {
       {
         test: /\.html$/, // 匹配以 .html 结尾的文件
         // 处理 html 文件的 img 图片（负责引入 img，从而能被 url-loader 处理）
-        use: 'html-loader'
+        /**
+         * html-loader可以处理html中的img图片，可负责将其中的图片引入，然后交由url-loader进行解析
+         */
+        use: 'html-loader',
+        // options: {
+        //   esModule: false
+        // }
       }
     ]
   },

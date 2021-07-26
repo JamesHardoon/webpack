@@ -36,6 +36,19 @@ module.exports = {
   module: {
     rules: [
       /**
+       * 缓存方式：
+       *    1.babel 缓存
+       *      cacheDirectory: true
+       *      作用：让第二次打包构建速度更快
+       *    2.hash: 每次 webpack 构建时会生成一个唯一的 hash 值
+       *      存在的问题：因为 js 和 css 同时使用一个 hash 值，如果重新打包，会导致所有缓存缓存失效
+       *      （只改变 js 文件，不改变 css 文件时，那么重新打包生产的 hash 值会覆盖掉 css 原有的 hash 值，那么就会存在一个问题，即只修改了一个 js 文件，则导致相关的依赖文件的缓存都失效了，因为共用了 一个 hash 值）
+       *    3.chunkhash: 根据 chunk 生成的 hash 值。如果打包来源于同一个 chunk，那么 hash 值就一样
+       *      存在的问题：js 和 css 的 hash 值还是一样的，因为 css 是在 js 中被引入的，所以同属于一个 chunkhash
+       *      （chunk 概念：比方一个入口文件 './src/js/index.js'，这个入口文件中还引入了其他文件（css，js 等文件），这些引入的文件最终会和这个入口文件打包成一个 chunk，也叫代码块 ）
+       *    4.contenthash: 根据文件的内容生成 hash 值。不同文件 hash 值一定不一样。
+       *      作用：让代码上线运行缓存更好使用（做上线代码的性能优化）。
+       * 
        * 使用 babel-loader 存在的问题：
        *    Babel 会对我们编写的 JS 代码 进行编译处理成浏览器能识别的语法，它的工作原理是
        *    ‘对所有的 JS 模块 都进行编译处理’，假如，有一万个 JS 模块，当我只改动其中一个
@@ -73,10 +86,12 @@ module.exports = {
        * 使用哈希值的注意点：
        *    1.hash：每次 webpack 构建时会生成一个唯一的 hash 值。
        *        问题：因为 css 和 js 文件使用的是同一个 hash 值，会导致所有的缓存失效。但是可能我只改动了一个文件（例如只改动了 js 文件执行了 webpack 指令后服务器上缓存的所有文件都会失效）
+       *        作用：让第二次打包构建速度更快
        *    2.chunkhash：根据 chunk 生成的 hash 值。如果打包来源于同一个 chunk，那么 hash 值就一样。
        *        问题：js 和 css 文件的 hash 值还是一样的，因为 css 总是（这里也是）在入口文件 js 中被引入的，所以这种情况下它们依旧是用属于一个 chunk。（我们这里值规定了一个入口文件，即 src/js/index.js）。
        *    3.contenthash：根据文件的内容生成 hash 值。不同文件的 hash 值一定不一样。
        *        推荐使用 contenthash。
+       *        作用：让代码上线运行缓存更好使用（做上线代码的性能优化）。
        * 
        * 使用缓存优化打包构建速度的总结：
        *    1.从 Babel 入手，对 Babel 进行缓存

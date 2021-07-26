@@ -4,8 +4,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 
 /** 
+ * tree shaking: 去除无用代码
+ *  前提：1.必须使用 ES6 模块化 2.开启 production 环境
+ *  作用：减少代码体积
  * 
- * 使用 tree shaking 来优化代码运行的性能
+ *  在 package.json 中配置 
+ *    "sideEffects": false 则表示所有代码都没有副作用(都可以进行 tree shaking)
+ *    问题: 可能会把 CSS / @babel/polyfill (副作用) 文件干掉
+ *    "sideEffects": ["*.css", "*.less","*.sass"] 表示 数组中配置的文件不进行 tree shaking
+ * 
+ * 
+ * !!! 使用 tree shaking 来优化代码运行的性能
  * 
  * 场景假设：假设有一棵树，它有着活力（参与工作运行）的树叶，也有着枯萎（不参与工作运行）的树叶，
  *    好看的树叶需要保留下来（有用的代码），枯萎的树叶（无用的、没参加过的代码）需要外力（tree shaking）
@@ -13,7 +22,7 @@ const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plug
  * 
  * tree shaking 的作用：去掉无用的、没有使用过的代码，让代码体积变得更小。
  * 
- * 使用 tree shaking 的前提条件：必须使用 ES6 模块化语法 和 必须开启 production 环境。
+ * !!! 使用 tree shaking 的前提条件：必须使用 ES6 模块化语法 和 必须开启 production 环境。
  *    满足这两种条件后就可以自动的对代码进行 tree shaking（执行 webpack 指令后）。
  * 
  * tree shaking 应用效果：
@@ -98,8 +107,6 @@ module.exports = {
             exclude: /node_modules/,
             loader: 'babel-loader',
             // !!! tree shaking
-            // tree shaking 可以应用到 package.json 中，要是想让业务代码生效的话 可以在 module.rules 里面添加
-            // sideEffects: false,
             options: {
               // 预设：指示 babel 做怎么样的兼容性处理
               // 要告诉 'babel-loader' 要做怎么样的语法转换

@@ -7,3 +7,9 @@
   1.掌握 webpack 基本&进阶用法
   2.常用的 Nodejs 操作
   3.ES6 语法
+
+  react create 01.react-cli
+
+  vue create 02.vue-cli
+    vue inspect --mode=development > webpack.dev.js // 通过指令将 开发环境的 配置暴露出来
+    vue inspect --mode=production > webpack.prod.js // 通过指令将 生产环境的 配置暴露出来

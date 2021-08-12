@@ -1,0 +1,3 @@
+hello cccc
+
+compilation.emitAsset('c.txt', new RawSource(data));

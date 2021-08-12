@@ -1,0 +1,3 @@
+hello bbbb
+
+compilation.assets['b.txt'] = new RawSource(data);

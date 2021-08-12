@@ -13,3 +13,10 @@
   vue create 02.vue-cli
     vue inspect --mode=development > webpack.dev.js // 通过指令将 开发环境的 配置暴露出来
     vue inspect --mode=production > webpack.prod.js // 通过指令将 生产环境的 配置暴露出来
+
+  node 中调试 webpack，在 package.json 中新增指令： (还要在需要调试的位置加上 debugger)
+    // node：通过node启动  inspect：调试模式  brk：在首行打一个断点，调试代码会在首行停住 ./node_modules/webpack/bin/webpack.js：调试对象及其路径
+    "scripts": {
+      "start": "node --inspect-brk ./node_modules/webpack/bin/webpack.js"
+    },
+    

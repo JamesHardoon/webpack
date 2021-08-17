@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const {promisify} = require('util')
+const { promisify } = require('util')
 
 const { validate } = require('schema-utils');
 const globby = require('globby'); // 专门用来匹配文件列表，并且可以根据自己的规则来忽略掉一些文件
@@ -9,8 +9,8 @@ const webpack = require('webpack');
 const schema = require('./schema.json');
 const { Compilation } = require('webpack');
 
-const readFile = promisify(fs.readFile);
-const {RawSource} = webpack.sources
+const readFile = promisify(fs.readFile); // 基于 promise 的方法
+const { RawSource } = webpack.sources
 
 /**
  * CopyWebpackPlugin 插件
@@ -46,6 +46,7 @@ class CopyWebpackPlugin {
         // context 就是 webpack 配置
         // 运行指令目录
         const context = compiler.options.context; // process.cwd()
+        console.log('context: ', context);
         // 将输入路径变成绝对路径
         // path.resolve(context, from) 以执行上下文目录为基准
         const absoluteFrom =  path.isAbsolute(from) ? from : path.resolve(context, from); // 不是绝对路径的话就根据 运行指令的目录为根目录拼接路径
@@ -56,13 +57,19 @@ class CopyWebpackPlugin {
 
         console.log("paths: ", paths); // 所有要加载的文件路径数组
 
-/*
         // 2. 读取paths中所有资源
         const files = await Promise.all(
+          /**
+           * map 方法遇到 async 并不会等一个执行完再去执行另一个，这样就会出问题，文件没读取完，下面的代码就执行完了
+           * 
+           * 解决方法：采用 Promise.all 接收一个数组，数组中是 n 个 promise 对象，map 返回的是一个数组，加上 async 返回的就是一个 promise 数组
+           *  而 Promise.all 是等数组中的所有 promise 对象都变成成功状态才继续执行
+           * 
+          */
           paths.map(async (absolutePath) => {
             // 读取文件
             const data = await readFile(absolutePath);
-            // basename得到最后的文件名称
+            // basename 得到最后的文件名称
             const relativePath = path.basename(absolutePath);
             // 和to属性结合
             // 没有to --> reset.css
@@ -70,10 +77,8 @@ class CopyWebpackPlugin {
             const filename = path.join(to, relativePath);
 
             return {
-              // 文件数据
-              data,
-              // 文件名称
-              filename
+              data, // 文件数据
+              filename // 文件名称
             }
           })
         )
@@ -86,18 +91,16 @@ class CopyWebpackPlugin {
             filename: file.filename
           }
         })
-        
+
         // 4. 添加compilation中，输出出去
         assets.forEach((asset) => {
           compilation.emitAsset(asset.filename, asset.source);
         })
-*/
+
         cb();
       })
-
     })
   }
-
 }
 
 module.exports = CopyWebpackPlugin;

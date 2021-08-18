@@ -1,0 +1,22 @@
+{
+  "name": "05.myWebpack",
+  "version": "1.0.0",
+  "description": "myWebpack",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "node ./script/build.js",
+    "debug": "node --inspect-brk ./script/build.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/parser": "^7.15.3",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/traverse": "^7.15.0"
+  }
+}
